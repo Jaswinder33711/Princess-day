@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>प्रिंसेस डे — प्यार भरी शुभकामनाएँ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Great+Vibes&family=Courgette&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg1:#fff0f6; --accent:#ff5aa5; --gold:#ffd166; --card:#ffffff}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Montserrat, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; background:linear-gradient(180deg,var(--bg1),#fff); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px}
+
+    /* glitter background */
+    .glitter-bg{position:fixed; inset:0; z-index:0; pointer-events:none; background:radial-gradient(circle at 10% 20%, rgba(255,255,255,0.9) 0px, rgba(255,230,245,0.6) 40px, transparent 80px), radial-gradient(circle at 80% 80%, rgba(255,245,230,0.9) 0px, rgba(255,230,245,0.6) 40px, transparent 90px); opacity:0.9;}
+    .sparkles{position:fixed; inset:0; z-index:0; pointer-events:none;}
+    .sparkle{position:absolute; width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.9); box-shadow:0 0 8px rgba(255,233,255,0.9); opacity:0.9}
+
+    .wrap{position:relative; z-index:1; max-width:1100px; width:100%; display:grid; grid-template-columns:1fr 420px; gap:18px}
+    .card{background:var(--card); border-radius:16px; box-shadow:0 12px 36px rgba(0,0,0,0.12); padding:20px}
+
+    .preview{position:relative; overflow:hidden; min-height:520px; display:flex; align-items:center; justify-content:center}
+    .stage{width:100%; border-radius:12px; padding:28px; text-align:center; position:relative; background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,250,255,0.2));}
+
+    .crown{position:absolute; left:50%; transform:translateX(-50%); top:40px; width:120px; pointer-events:none; animation:floatCrown 3.5s ease-in-out infinite}
+    @keyframes floatCrown{0%{transform:translateX(-50%) translateY(0) rotate(-4deg)}50%{transform:translateX(-50%) translateY(-12px) rotate(4deg)}100%{transform:translateX(-50%) translateY(0) rotate(-4deg)}}
+
+    .emoji{font-size:96px; display:inline-block; margin-top:28px}
+    .title{font-family:'Great Vibes', cursive; font-size:48px; margin:6px 0; color:var(--accent)}
+    .subtitle{font-size:16px; color:#6b5b6b; margin-bottom:12px}
+    .wish{display:inline-block; padding:16px; border-radius:14px; font-size:20px; min-width:320px; background:linear-gradient(90deg, rgba(255,255,255,0.85), rgba(255,250,255,0.6));}
+
+    /* photo frame */
+    .photo-frame{width:220px; height:220px; border-radius:18px; overflow:hidden; margin:18px auto; border:6px solid rgba(255,255,255,0.6); box-shadow:0 10px 30px rgba(255,122,182,0.12); background:linear-gradient(135deg,#fff0,#fff)}
+    .photo-frame img{width:100%; height:100%; object-fit:cover}
+
+    /* small controls */
+    .controls{display:flex; flex-direction:column; gap:12px}
+    label{font-size:13px; color:#6b5b6b}
+    input[type='text'], textarea, select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid #eee; font-size:15px}
+    textarea{min-height:90px}
+    .btn{display:inline-block; padding:10px 14px; border-radius:10px; background:var(--accent); color:white; font-weight:700; border:none; cursor:pointer}
+    .btn.secondary{background:#ffd166; color:#6b3a3a}
+    .row{display:flex; gap:8px}
+    .qr-wrap{text-align:center; padding:8px}
+    #qrcode{display:inline-block; background:white; padding:8px; border-radius:8px}
+    .small{font-size:13px; color:#6b5b6b}
+
+    /* love story modal */
+    .modal{position:fixed; inset:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:5}
+    .modal-card{width:90%; max-width:720px; background:white; border-radius:12px; padding:18px}
+    .modal-close{float:right; cursor:pointer; font-weight:800}
+
+    footer{grid-column:1/-1; text-align:center; font-size:12px; color:#9a7c94; margin-top:8px}
+    @media(max-width:980px){.wrap{grid-template-columns:1fr;}.preview{min-height:420px}}
+  </style>
+</head>
+<body>
+  <div class="glitter-bg"></div>
+  <canvas class="sparkles" id="sparkleCanvas"></canvas>
+
+  <div class="wrap">
+    <div class="card preview">
+      <div class="stage" id="stage">
+        <!-- Crown SVG -->
+        <svg class="crown" id="crownSVG" viewBox="0 0 64 32" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" fill-rule="evenodd">
+            <path d="M2 26c8-6 18-8 30-8s22 2 30 8v4H2v-4z" fill="#FFD166"/>
+            <path d="M8 10l6 12 8-16 8 10 8-12 6 14" stroke="#FF8AC6" stroke-width="1.5" fill="#FFB3D6"/>
+            <circle cx="10" cy="9" r="2" fill="#FF6FA3"/>
+            <circle cx="30" cy="6" r="2" fill="#FF6FA3"/>
+            <circle cx="52" cy="8" r="2" fill="#FF6FA3"/>
+          </g>
+        </svg>
+
+        <div class="photo-frame" id="photoFrame"><img id="photoPreview" src="" alt="Couple photo" /></div>
+
+        <div class="emoji" id="emoji">👸</div>
+        <div class="title" id="titleText">प्रिंसेस डे की शुभकामनाएँ</div>
+        <div class="subtitle" id="subtitle">आपके लिए एक प्यार भरी शुभकामना ✨</div>
+        <div class="wish" id="wishText">आपका दिन चमक, खुशियों और रॉयल प्यार से भरा हो — 💖</div>
+      </div>
+    </div>
+
+    <div class="card controls">
+      <div>
+        <label>प्राप्तकर्ता का नाम (GF का नाम)</label>
+        <input type="text" id="toName" placeholder="उदा. प्रियंका" />
+      </div>
+
+      <div>
+        <label>आपका संदेश (हिन्दी)</label>
+        <textarea id="inputWish">आपका दिन चमक, खुशियों और रॉयल प्यार से भरा हो — 💖</textarea>
+      </div>
+
+      <div>
+        <label>फॉन्ट साइज</label>
+        <div class="row">
+          <input id="fontSize" type="range" min="16" max="36" value="20" />
+          <div class="small"><span id="fontSizeVal">20</span> px</div>
+        </div>
+      </div>
+
+      <div>
+        <label>इमोजी चुनें</label>
+        <div class="row">
+          <select id="emojiSelect">
+            <option>👸</option>
+            <option>💖</option>
+            <option>🌸</option>
+            <option>✨</option>
+            <option>🎀</option>
+          </select>
+          <button class="btn secondary" id="randomBtn">रैंडम</button>
+        </div>
+      </div>
+
+      <div>
+        <label>कपल फोटो जोड़ें (ऑप्शन)</label>
+        <div class="row">
+          <input type="file" id="photoInput" accept="image/*" />
+          <button class="btn secondary" id="clearPhoto">हटाएं</button>
+        </div>
+        <div class="small">अपलोड करें — फ्रेम में दिखेगा।</div>
+      </div>
+
+      <div>
+        <label>प्यार भरा संगीत (ऑप्शन)</label>
+        <div class="row">
+          <button class="btn" id="playMusic">संगीत चलाएँ</button>
+          <button class="btn secondary" id="stopMusic">रोकें</button>
+        </div>
+        <div class="small">(मोबाइल पर टैप करने पर ही प्ले होगा)</div>
+      </div>
+
+      <div>
+        <label>Love Story पेज</label>
+        <div class="row">
+          <button class="btn" id="editStory">संपादित करें</button>
+          <button class="btn secondary" id="viewStory">देखें</button>
+        </div>
+        <div class="small">अपने प्यार की छोटी कहानी लिखें — यह एक सुंदर सरप्राइज़ बनेगी।</div>
+      </div>
+
+      <div>
+        <label>शेयर / QR कोड</label>
+        <div class="qr-wrap">
+          <div id="qrcode"></div>
+          <div class="small">QR स्कैन करने पर वही निजी संदेश और लिंक खुलेगा</div>
+          <div style="margin-top:8px" class="row">
+            <button class="btn" id="genBtn">QR बनाएँ</button>
+            <button class="btn secondary" id="downloadBtn">QR डाउनलोड करें</button>
+          </div>
+          <div style="margin-top:8px">
+            <button class="btn" id="sendBtn">प्यार के साथ भेजें ❤️</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="small">टिप: "प्यार के साथ भेजें" दबाने पर लिंक क्लिपबोर्ड में कॉपी होगा — आप इसे व्हाट्सएप/मैसेज पर भेज सकते हैं।</div>
+    </div>
+
+    <footer>✨ खास आपके लिए — और भी कस्टमाइजेशन चाहिए तो बताइए।</footer>
+  </div>
+
+  <!-- modal for love story -->
+  <div id="storyModal" class="modal" style="display:none">
+    <div class="modal-card">
+      <div class="modal-close" id="closeModal">✕</div>
+      <h3>अपनी Love Story लिखें</h3>
+      <textarea id="storyText" style="width:100%; min-height:180px; padding:10px; border-radius:8px; border:1px solid #eee"></textarea>
+      <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end">
+        <button class="btn" id="saveStory">सहेजें</button>
+        <button class="btn secondary" id="cancelStory">रद्द करें</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="bgm" loop src="https://cdn.pixabay.com/download/audio/2022/08/24/audio_2c2f6b2f6a.mp3?filename=calm-love-ambience-120787.mp3"></audio>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    // sparkles canvas
+    const canvas = document.getElementById('sparkleCanvas');
+    const ctx = canvas.getContext('2d');
+    function resizeCanvas(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+    const sparkles = [];
+    function spawnSparkle(){ sparkles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*2+1, a:1, vy: -0.2 - Math.random()*0.6}); if(sparkles.length>120) sparkles.shift(); }
+    setInterval(spawnSparkle, 200);
+    function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); for(let s of sparkles){ ctx.globalAlpha = s.a; ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r,0,Math.PI*2); ctx.fill(); s.y += s.vy; s.a -= 0.003; if(s.a<=0){ s.x = Math.random()*canvas.width; s.y = canvas.height; s.a=1; s.vy = -0.2 - Math.random()*0.6; } } requestAnimationFrame(draw); }
+    draw();
+
+    // elements
+    const wishEl = document.getElementById('wishText');
+    const inputWish = document.getElementById('inputWish');
+    const fontSize = document.getElementById('fontSize');
+    const fontSizeVal = document.getElementById('fontSizeVal');
+    const emojiEl = document.getElementById('emoji');
+    const emojiSelect = document.getElementById('emojiSelect');
+    const randomBtn = document.getElementById('randomBtn');
+    const genBtn = document.getElementById('genBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const qrcodeContainer = document.getElementById('qrcode');
+    const toName = document.getElementById('toName');
+    const sendBtn = document.getElementById('sendBtn');
+    const bgm = document.getElementById('bgm');
+    const playMusic = document.getElementById('playMusic');
+    const stopMusic = document.getElementById('stopMusic');
+    const photoInput = document.getElementById('photoInput');
+    const photoPreview = document.getElementById('photoPreview');
+    const clearPhoto = document.getElementById('clearPhoto');
+
+    const editStory = document.getElementById('editStory');
+    const viewStory = document.getElementById('viewStory');
+    const storyModal = document.getElementById('storyModal');
+    const closeModal = document.getElementById('closeModal');
+    const saveStory = document.getElementById('saveStory');
+    const cancelStory = document.getElementById('cancelStory');
+    const storyText = document.getElementById('storyText');
+
+    // load from localStorage if present
+    if(localStorage.getItem('princess_wish')){ inputWish.value = localStorage.getItem('princess_wish'); wishEl.textContent = inputWish.value; }
+    if(localStorage.getItem('princess_name')){ toName.value = localStorage.getItem('princess_name'); updateTitle(); }
+    if(localStorage.getItem('princess_story')){ storyText.value = localStorage.getItem('princess_story'); }
+    if(localStorage.getItem('princess_photo')){ photoPreview.src = localStorage.getItem('princess_photo'); }
+
+    // Read from URL hash
+    function readHash(){
+      if(location.hash && location.hash.startsWith('#')){
+        try{
+          const params = new URLSearchParams(location.hash.slice(1));
+          const msg = params.get('msg')||'';
+          const name = params.get('to')||'';
+          const photo = params.get('photo')||'';
+          if(name){ toName.value = decodeURIComponent(name); updateTitle(); localStorage.setItem('princess_name', toName.value); }
+          if(msg){ inputWish.value = decodeURIComponent(msg); wishEl.textContent = inputWish.value; localStorage.setItem('princess_wish', inputWish.value); }
+          if(photo){ photoPreview.src = decodeURIComponent(photo); localStorage.setItem('princess_photo', photoPreview.src); }
+        }catch(e){ console.log(e); }
+      }
+    }
+    readHash();
+
+    // events
+    inputWish.addEventListener('input', ()=>{ wishEl.textContent = inputWish.value || 'प्रिंसेस डे की शुभकामनाएँ'; localStorage.setItem('princess_wish', inputWish.value); });
+    fontSize.addEventListener('input', ()=>{ const v = fontSize.value; fontSizeVal.textContent = v; wishEl.style.fontSize = v + 'px'; });
+    emojiSelect.addEventListener('change', ()=>{ emojiEl.textContent = emojiSelect.value; });
+    randomBtn.addEventListener('click', ()=>{ const opts = ['👸','💖','🌸','✨','🎀']; const pick = opts[Math.floor(Math.random()*opts.length)]; emojiEl.textContent = pick; emojiSelect.value = pick; });
+
+    // name styling
+    toName.addEventListener('input', ()=>{ localStorage.setItem('princess_name', toName.value); updateTitle(); });
+    function updateTitle(){ const name = toName.value.trim(); const title = name ? `प्रिय ${escapeHtml(name)}` : 'प्रिंसेस'; document.getElementById('titleText').textContent = `${title} — प्रिंसेस डे की शुभकामनाएँ`; }
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]; }); }
+
+    // photo upload
+    photoInput.addEventListener('change', (e)=>{
+      const file = e.target.files[0]; if(!file) return;
+      const reader = new FileReader(); reader.onload = function(ev){ photoPreview.src = ev.target.result; localStorage.setItem('princess_photo', ev.target.result); }
+      reader.readAsDataURL(file);
+    });
+    clearPhoto.addEventListener('click', ()=>{ photoPreview.src = ''; localStorage.removeItem('princess_photo'); photoInput.value=''; });
+
+    // love story modal
+    editStory.addEventListener('click', ()=>{ storyModal.style.display='flex'; });
+    closeModal.addEventListener('click', ()=>{ storyModal.style.display='none'; });
+    cancelStory.addEventListener('click', ()=>{ storyModal.style.display='none'; });
+    saveStory.addEventListener('click', ()=>{ localStorage.setItem('princess_story', storyText.value); storyModal.style.display='none'; alert('Love Story सहेज ली गयी'); });
+    viewStory.addEventListener('click', ()=>{ const s = localStorage.getItem('princess_story')||'आप यहाँ अपनी छोटी-सी लव स्टोरी लिख सकते हैं — उदाहरण: हम पहली बार कॉलेज में मिले...'; alert(s); });
+
+    // QR generation
+    let qrcode;
+    function clearQR(){ qrcodeContainer.innerHTML = ''; }
+    function generateQR(){
+      const msg = encodeURIComponent(inputWish.value || 'प्रिंसेस डे की शुभकामनाएँ');
+      const name = encodeURIComponent(toName.value||'');
+      const photo = encodeURIComponent(photoPreview.src||'');
+      const url = location.origin + location.pathname + '#msg=' + msg + '&to=' + name + (photo? '&photo=' + photo : '');
+      clearQR();
+      qrcode = new QRCode(qrcodeContainer, { text: url, width:220, height:220, colorDark:'#000000', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.H });
+      history.replaceState(null,'', '#msg=' + msg + '&to=' + name + (photo? '&photo=' + photo : ''));
+    }
+    genBtn.addEventListener('click', ()=>{ generateQR(); });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if(!qrcodeContainer.querySelector('img') && !qrcodeContainer.querySelector('canvas')){ alert('कृपया पहले QR बनाएँ'); return; }
+      const img = qrcodeContainer.querySelector('img');
+      if(img){ const url = img.src; const a = document.createElement('a'); a.href = url; a.download = 'princess-day-qr.png'; a.click(); }
+      else { const canvas = qrcodeContainer.querySelector('canvas'); const url = canvas.toDataURL('image/png'); const a = document.createElement('a'); a.href = url; a.download = 'princess-day-qr.png'; a.click(); }
+    });
+
+    // Send with love
+    sendBtn.addEventListener('click', async ()=>{
+      generateQR();
+      const msg = encodeURIComponent(inputWish.value || 'प्रिंसेस डे की शुभकामनाएँ');
+      const name = encodeURIComponent(toName.value||'');
+      const photo = encodeURIComponent(photoPreview.src||'');
+      const url = location.origin + location.pathname + '#msg=' + msg + '&to=' + name + (photo? '&photo=' + photo : '');
+      try{ await navigator.clipboard.writeText(url); showTinyConfetti(); alert('लिंक क्लिपबोर्ड में कॉपी हो गया — अब इसे भेजें!'); }
+      catch(e){ prompt('कृपया इस लिंक को कॉपी कर लें:', url); }
+    });
+
+    // confetti
+    function showTinyConfetti(){ const stage = document.getElementById('stage'); for(let i=0;i<28;i++){ const p = document.createElement('div'); p.style.position='absolute'; p.style.left = (50 + (Math.random()-0.5)*60) + '%'; p.style.top = (50 + (Math.random()-0.5)*40) + '%'; p.style.width='10px'; p.style.height='10px'; p.style.background=['#ff6fa3','#ffd166','#ffb3d6','#ffe0f0'][Math.floor(Math.random()*4)]; p.style.borderRadius='3px'; p.style.opacity='0.95'; stage.appendChild(p); const anim = p.animate([{transform:'translateY(0) rotate(0)', opacity:1},{transform:'translateY(-180px) rotate(360deg)', opacity:0}], {duration:1000+Math.random()*800}); anim.onfinish = ()=>p.remove(); } }
+
+    // music controls
+    playMusic.addEventListener('click', ()=>{ bgm.play().catch(()=>{}); });
+    stopMusic.addEventListener('click', ()=>{ bgm.pause(); bgm.currentTime = 0; });
+
+    // auto-generate QR on load
+    window.addEventListener('load', ()=>{ generateQR(); });
+  </script>
+</body>
+</html>
